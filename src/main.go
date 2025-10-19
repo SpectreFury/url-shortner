@@ -16,17 +16,19 @@ func main() {
 
 	mux := http.NewServeMux()
 
-	mux.HandleFunc("GET /", func(w http.ResponseWriter, r *http.Request) {
-		w.Write([]byte("Working it"))
-	})
+	handler := Handlers{
+		Client: client,
+	}
+
+	mux.HandleFunc("/{id}", handler.redirectURL)
+	mux.HandleFunc("/", handler.generateURL)
 
 	port := os.Getenv("PORT")
 
-	fmt.Println("Listening on PORT: ", port)
+	fmt.Println("Listening on PORT:", port)
 	err = http.ListenAndServe(":"+port, mux)
 	if err != nil {
 		log.Fatalf("Error starting the server %v", err)
 		panic(err)
 	}
-
 }
