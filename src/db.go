@@ -28,12 +28,15 @@ func Connect() (*mongo.Client, error) {
 	}
 
 	fmt.Println("Connected to DB")
-	defer func() {
-		if err = client.Disconnect(context.TODO()); err != nil {
-			log.Fatal(err)
-			panic(err)
-		}
-	}()
 
 	return client, nil
+}
+
+func Disconnect(client *mongo.Client) error {
+	if err := client.Disconnect(context.TODO()); err != nil {
+		log.Fatal(err)
+		panic(err)
+	}
+
+	return nil
 }
